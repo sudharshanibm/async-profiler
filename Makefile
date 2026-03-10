@@ -127,6 +127,8 @@ ifeq ($(ARCH_TAG),)
     ARCH_TAG=riscv64
   else ifeq ($(ARCH),loongarch64)
     ARCH_TAG=loongarch64
+  else ifeq ($(ARCH),s390x)
+    ARCH_TAG=s390x
   else
     ARCH_TAG=x86
   endif
@@ -146,7 +148,7 @@ jar: build/jar build/$(API_JAR) build/$(CONVERTER_JAR)
 release: $(PACKAGE_NAME).$(PACKAGE_EXT)
 
 $(PACKAGE_NAME).tar.gz: $(PACKAGE_DIR)
-	patchelf --remove-needed ld-linux-x86-64.so.2 --remove-needed ld-linux-aarch64.so.1 $(PACKAGE_DIR)/$(LIB_PROFILER)
+	patchelf --remove-needed ld-linux-x86-64.so.2 --remove-needed ld-linux-aarch64.so.1 --remove-needed ld64.so.1 $(PACKAGE_DIR)/$(LIB_PROFILER)
 	tar czf $@ -C $(PACKAGE_DIR)/.. $(PACKAGE_NAME)
 	rm -r $(PACKAGE_DIR)
 

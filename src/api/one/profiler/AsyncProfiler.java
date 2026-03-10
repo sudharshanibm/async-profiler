@@ -105,6 +105,8 @@ public class AsyncProfiler implements AsyncProfilerMXBean {
                 return "linux-x86";
             } else if (arch.contains("ppc64")) {
                 return "linux-ppc64le";
+            } else if (arch.equals("s390x") || arch.contains("s390")) {
+                return "linux-s390x";
             }
         } else if (os.contains("mac")) {
             return "macos";

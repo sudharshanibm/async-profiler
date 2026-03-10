@@ -496,6 +496,9 @@ void VMStructs::resolveOffsets() {
 #elif defined(__arm__) || defined(__thumb__)
     _interpreter_frame_bcp_offset = VM::hotspot_version() >= 11 ? -8 : 0;
     _entry_frame_call_wrapper_offset = 0;
+#elif defined(__s390x__)
+    _interpreter_frame_bcp_offset = VM::hotspot_version() >= 11 ? -8 : VM::hotspot_version() == 8 ? -7 : 0;
+    _entry_frame_call_wrapper_offset = 0;
 #endif
 
     // JDK-8292758 has slightly changed ScopeDesc encoding

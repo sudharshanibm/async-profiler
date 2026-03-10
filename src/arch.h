@@ -178,6 +178,28 @@ const int PERF_REG_PC = 0;      // PERF_REG_LOONGARCH_PC
 #define callerFP()        __builtin_frame_address(1)
 #define callerSP()        __builtin_frame_address(0)
 
+#elif defined(__s390x__)
+
+typedef unsigned short instruction_t;
+// s390x uses 0x0001 as software breakpoint (illegal instruction trap)
+// This matches what GDB and the Linux kernel use for s390x
+const instruction_t BREAKPOINT = 0x0001;
+const int BREAKPOINT_OFFSET = 0;
+
+const int SYSCALL_SIZE = 2;  // SVC instruction is 2 bytes
+const int FRAME_PC_SLOT = 7;  // Return address offset in stack frame
+const int PLT_HEADER_SIZE = 32;
+const int PLT_ENTRY_SIZE = 32;
+const int PERF_REG_PC = 16;  // PERF_REG_S390_PC (psw_addr)
+
+#define spinPause()       asm volatile("" ::: "memory")
+#define rmb()             asm volatile("bcr 15,0" : : : "memory")
+#define flushCache(addr)  __builtin___clear_cache((char*)(addr), (char*)(addr) + sizeof(instruction_t))
+
+#define callerPC()        __builtin_return_address(0)
+#define callerFP()        __builtin_frame_address(1)
+#define callerSP()        __builtin_frame_address(0)
+
 #else
 
 #error "Compiling on unsupported arch"
